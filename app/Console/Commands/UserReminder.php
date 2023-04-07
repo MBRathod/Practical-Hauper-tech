@@ -41,6 +41,7 @@ class UserReminder extends Command
     {
         try{
             $remainders = Reminders::with('user')->where('schedule_date_time','>', date('Y-m-d H:i',strtotime(Carbon::now())))->get();
+            $remainders = Reminders::with('user')->where('schedule_date_time','<=', date('Y-m-d H:i',strtotime(Carbon::now())))->get();
             if($remainders){
                 foreach ($remainders as $remainder){
                     if($remainder->user)
