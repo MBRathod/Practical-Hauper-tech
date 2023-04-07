@@ -40,20 +40,19 @@ class UserReminder extends Command
     public function handle()
     {
         try{
-            $remainders = Reminders::where('schedule_date_time', date('Y-m-d H:i',strtotime(Carbon::now())))->get();
-            
-            $users = User::get();
+            $remainders = Reminders::with('user')->where('schedule_date_time', date('Y-m-d H:i',strtotime(Carbon::now())))->get();
             if($remainders){
                 foreach ($remainders as $remainder){
-                    foreach($users as $user)
+                    if($remainder->user)
                     {
+                        $emailTo = $remainder->user->email; 
                         $info = array(
-                            'name' => $user->name,
+                            'name' => $remainder->user->name,
                             'description' => $remainder->description,
                             'title' => $remainder->title
                         );
-                        Mail::send('admin.mail', $info, function($message) use ($user,$remainder) {
-                            $message->to($user->email)->subject
+                        Mail::send('admin.mail', $info, function($message) use ($emailTo,$remainder) {
+                            $message->to($emailTo)->subject
                                ($remainder->title);
                          });
                        

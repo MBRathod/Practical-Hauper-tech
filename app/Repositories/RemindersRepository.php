@@ -16,6 +16,7 @@ class RemindersRepository implements RemindersRepositoryInterface
     public function storeReminders(Request $request)
     {
         $data = $request->all();
+        $data['created_by'] = auth()->user()->id;
         return Reminders::create($data);
     }
 
@@ -23,6 +24,7 @@ class RemindersRepository implements RemindersRepositoryInterface
     {
         $data = $request->all();
         $reminders = $this->getSingleReminders($id);
+        $data['created_by'] = auth()->user()->id;
         $reminders->update($data);
         return $reminders;
     }
@@ -41,7 +43,7 @@ class RemindersRepository implements RemindersRepositoryInterface
             3 => 'reminders.created_at',
         );
 
-        $query = Reminders::select('*');
+        $query = Reminders::select('*')->where('created_by',auth()->user()->id);
 
 
         $recordsTotal = $query->count();

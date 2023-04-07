@@ -17,7 +17,7 @@ class CreateRemindersTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
-            $table->dateTime('schedule_date_time')->nullable();;
+            $table->dateTime('schedule_date_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

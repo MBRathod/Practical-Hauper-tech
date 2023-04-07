@@ -23,7 +23,7 @@ class RemindersRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'       =>  'required|regex:/^[a-zA-Z]+$/u',
+            'title'       =>  'required',
             'description'      =>  'required',
             'schedule_date_time' => 'required',
         ];
@@ -33,7 +33,6 @@ class RemindersRequest extends FormRequest
     {
         return [
             'title.required'       => 'Please Enter Title',
-            'title.regex' => 'Special Character Not Allowed',
             'description.required'       => 'Please Enter Description',
             'schedule_date_time.required'        => 'Please Select Schedule Date & Time',
         ];
