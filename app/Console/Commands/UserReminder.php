@@ -43,23 +43,28 @@ class UserReminder extends Command
             $remainders = Reminders::where('schedule_date_time', date('Y-m-d H:i',strtotime(Carbon::now())))->get();
             
             $users = User::get();
-            foreach ($remainders as $remainder){
-                foreach($users as $user)
-                {
-                    $info = array(
-                        'name' => $user->name,
-                        'description' => $remainder->description,
-                        'title' => $remainder->title
-                    );
-                    Mail::send('admin.mail', $info, function($message) use ($user,$remainder) {
-                        $message->to($user->email)->subject
-                           ($remainder->title);
-                     });
+            if($remainders){
+                foreach ($remainders as $remainder){
+                    foreach($users as $user)
+                    {
+                        $info = array(
+                            'name' => $user->name,
+                            'description' => $remainder->description,
+                            'title' => $remainder->title
+                        );
+                        Mail::send('admin.mail', $info, function($message) use ($user,$remainder) {
+                            $message->to($user->email)->subject
+                               ($remainder->title);
+                         });
+                       
+                    }
+                    Log::info('Mail Sent');
                    
                 }
-                Log::info('Mail Sent');
-               
+            }else{
+                Log::info('Data Not Found');
             }
+           
         }catch(Exception $e){
             Log::info('Error '.$e->getMessage());
         }
